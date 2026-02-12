@@ -1,0 +1,51 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+
+<div class="container py-5">
+    <div class="p-5 mb-4 rounded-3 shadow-sm border" style="background-color: var(--ctp-mantle);">
+        <div class="container-fluid py-5 text-center">
+            <h1 class="display-5 fw-bold text-primary">Blazor Invoice Generator</h1>
+            <p class="col-md-12 fs-4 text-subtext0">
+                Invoice generation system built with .NET 10 Blazor Interactive Server mode, QuestPDF and SQL Server.
+            </p>
+            <AuthorizeView>
+                <Authorized>
+                    <a href="invoices/create" class="btn btn-primary btn-lg px-4 shadow">Create New Invoice</a>
+                </Authorized>
+                <NotAuthorized>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <a href="Account/Register" class="btn btn-primary btn-lg px-4 gap-3 shadow">Get Started</a>
+                        <a href="Account/Login" class="btn btn-primary btn-lg px-4 shadow">Sign Up</a>
+                    </div>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+    </div>
+
+
+</div>
+
+
+<style>
+    /* Custom style to utilize your Catppuccin variables */
+    .text-text {
+        color: var(--ctp-text);
+    }
+
+    .text-subtext0 {
+        color: var(--ctp-subtext0);
+    }
+
+    .text-mauve {
+        color: var(--ctp-mauve);
+    }
+
+    .feature-icon {
+        width: 4rem;
+        height: 4rem;
+        border-radius: .75rem;
+        background-color: var(--ctp-surface0);
+    }
+</style>

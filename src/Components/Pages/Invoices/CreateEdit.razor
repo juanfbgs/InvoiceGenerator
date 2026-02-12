@@ -1,0 +1,144 @@
+﻿@page "/Invoices/Create"
+@page "/Invoices/Edit/{Id:int}"
+@rendermode InteractiveServer
+
+<PageTitle>@title</PageTitle>
+
+<h3>@title</h3>
+
+
+@if (Invoice == null)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card h-100 mb-3">
+        <div class="card-body overflow-auto">
+            <EditForm Model="@Invoice" OnValidSubmit="CreateEditInvoice" FormName="AddOrEditInvoiceForm">
+                <div class="mb-3">
+                    <label class="form-label">Invoice Number</label>
+                    <InputText @bind-Value="Invoice!.InvoiceNumber" class="form-control" placeholder="INV-2026-001" />
+                    <ValidationMessage For="@(() => Invoice.InvoiceNumber)" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Partner Name</label>
+                    <InputText @bind-Value="Invoice.PartnerName" class="form-control" placeholder="Cyberdyne Systems" />
+                    <ValidationMessage For="@(() => Invoice.PartnerName)" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Partner Street</label>
+                    <InputText @bind-Value="Invoice.PartnerStreet" class="form-control" placeholder="123 Tech Lane" />
+                    <ValidationMessage For="@(() => Invoice.PartnerStreet)" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Partner Location</label>
+                    <InputText @bind-Value="Invoice.PartnerLocation" class="form-control"
+                               placeholder="90210, Los Angeles, USA" />
+                    <ValidationMessage For="@(() => Invoice.PartnerLocation)" class="text-danger" />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Description</label>
+                        <InputTextArea @bind-Value="Invoice.ServiceDescription" class="form-control"
+                                       placeholder="AI Safety Consultation and Logic Audit" />
+                        <ValidationMessage For="@(() => Invoice.ServiceDescription)" class="text-danger" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Hours</label>
+                        <InputNumber @bind-Value="Invoice.ServiceHours" class="form-control" min="1" max="10000" />
+                        <ValidationMessage For="@(() => Invoice.ServiceHours)" class="text-danger" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Price per Hour</label>
+                        <InputNumber @bind-Value="Invoice.ServiceSinglePrice" class="form-control" min="0.01"
+                                     max="999999.99" step="0.01" />
+                        <ValidationMessage For="@(() => Invoice.ServiceSinglePrice)" class="text-danger" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <InputSelect @bind-Value="Invoice.PaymentMethod" class="form-select">
+                            <option value="">-- Select Method --</option>
+                            @foreach (var method in paymentMethods)
+                            {
+                                <option value="@method">@method</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => Invoice.PaymentMethod)" class="text-danger" />
+                    </div>
+
+                </div>
+                <div class="mt-auto p-3 border-top">
+                    <div class="d-flex justify-content-end">
+                        <a href="/invoices" class="btn btn-outline-secondary d-inline-flex align-items-center">
+                            Back to Invoices
+                        </a>
+                        <button type="submit" class="btn btn-primary ms-2">
+                            Save
+                        </button>
+                    </div>
+                </div>
+                <DataAnnotationsValidator />
+                <ValidationSummary class="text-danger mb-3" />
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Invoice? Invoice { get; set; }
+
+    private string title = string.Empty;
+
+    private string[] paymentMethods = new[]
+    {
+        "Bank Transfer (CBU/CVU/Alias)",
+        "Credit / Debit Card",
+        "Mercado Pago",
+        "PayPal",
+        "Cash (Pesos/USD)",
+        "Crypto (USDT)"
+    };
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            Invoice = await InvoiceService.GetInvoiceById(Id.Value);
+            title = $"Edit Invoice {Invoice!.InvoiceNumber}";
+        }
+        else
+        {
+            title = "Create New Invoice";
+            Invoice = new();
+        }
+    }
+
+    private async Task CreateEditInvoice()
+    {
+        if (Id is not null)
+        {
+            await InvoiceService.UpdateInvoice(Invoice!);
+        }
+        else
+        {
+            await InvoiceService.AddInvoice(Invoice!);
+        }
+
+        Nav.NavigateTo("/Invoices");
+    }
+}

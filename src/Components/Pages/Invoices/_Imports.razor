@@ -1,0 +1,7 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using InvoiceGenerator.Models
+@using InvoiceGenerator.Services
+
+@inject IInvoiceService InvoiceService
+@inject NavigationManager Nav
+@attribute [Authorize]
