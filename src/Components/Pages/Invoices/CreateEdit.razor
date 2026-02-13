@@ -67,7 +67,7 @@ else
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Payment Method</label>
                         <InputSelect @bind-Value="Invoice.PaymentMethod" class="form-select">
-                            <option value="">-- Select Method --</option>
+                            <option value="" disabled selected>Select Method</option>
                             @foreach (var method in paymentMethods)
                             {
                                 <option value="@method">@method</option>
@@ -106,12 +106,12 @@ else
 
     private string[] paymentMethods = new[]
     {
-        "Bank Transfer (CBU/CVU/Alias)",
+        "Bank Transfer",
         "Credit / Debit Card",
         "Mercado Pago",
         "PayPal",
-        "Cash (Pesos/USD)",
-        "Crypto (USDT)"
+        "Cash",
+        "Crypto"
     };
 
     protected override async Task OnParametersSetAsync()
