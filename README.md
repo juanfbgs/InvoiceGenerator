@@ -4,4 +4,4 @@ Invoice generation system built with .NET 10 Blazor Interactive Server mode, Que
 
 ## Demo
 
-https://github.com/user-attachments/assets/2b13c670-a701-4392-8c51-16f4b5d37d1f
+https://github.com/user-attachments/assets/d29ab163-3f2e-41ec-95cb-4448901ebde9
